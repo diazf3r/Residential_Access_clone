@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/widgets/anuncios_card.dart';
+import 'package:myapp/widgets/anuncios_card.dart';
 
 class AnuncioPage extends StatelessWidget {
   const AnuncioPage({super.key});
