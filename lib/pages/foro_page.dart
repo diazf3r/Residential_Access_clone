@@ -1,6 +1,6 @@
-import 'package:access_project/src/pages/widgets/custom_input.dart';
-import 'package:access_project/src/pages/widgets/list_consultas.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/custom_input.dart';
+import 'package:myapp/widgets/list_consultas.dart';
 
 class ForoPage extends StatelessWidget {
   ForoPage({super.key});

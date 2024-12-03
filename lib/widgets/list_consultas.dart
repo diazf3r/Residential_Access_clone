@@ -20,8 +20,30 @@ class ListConsultas extends StatelessWidget {
         description,
         maxLines: 3,
       ),
-      trailing:
-          IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward)),
+      trailing: IconButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    actions: [
+                      ConversationCard(
+                        title: title,
+                        description: description,
+                        backgroundColor: Colors.amberAccent[100],
+                      ),
+                      ConversationCard(
+                        title: 'RESPUESTA',
+                        description: 'ESTA ES UNA RESPUESTA',
+                        titleAlignment: Alignment.centerRight,
+                        descriptionAlignment: Alignment.centerRight,
+                        backgroundColor: Colors.orange[300],
+                      )
+                    ],
+                  );
+                });
+          },
+          icon: const Icon(Icons.arrow_forward)),
     );
   }
 }
