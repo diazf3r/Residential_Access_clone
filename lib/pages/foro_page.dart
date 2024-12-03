@@ -1,3 +1,5 @@
+import 'package:access_project/src/pages/widgets/custom_input.dart';
+import 'package:access_project/src/pages/widgets/list_consultas.dart';
 import 'package:flutter/material.dart';
 
 class ForoPage extends StatelessWidget {
@@ -15,7 +17,7 @@ class ForoPage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 25),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 25),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -34,16 +36,12 @@ class ForoPage extends StatelessWidget {
               child: ListView.separated(
                 itemCount: 2,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Title(
-                        color: Color(0xFF42A5F5),
-                        child: Text('TITULO DEL TEMA')),
-                    subtitle: Text('ESTE ES EL CONTENIDO'),
-                    trailing: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.arrow_forward)),
+                  return ListConsultas(
+                    title: 'ESTO ES UN TITULO',
+                    description: 'ESTO ES UNA DESCRIPCION DE ALGO',
                   );
                 },
-                separatorBuilder: (context, index) => Divider(
+                separatorBuilder: (context, index) => const Divider(
                   thickness: 1,
                   indent: 15,
                   endIndent: 15,
@@ -59,30 +57,30 @@ class ForoPage extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  actionsPadding: EdgeInsets.all(15),
+                  actionsPadding: const EdgeInsets.all(15),
                   actions: [
                     CustomInput(
                       controlador: tema,
-                      dialogo: 'Ingrese el tema de discución',
+                      dialogo: 'Ingrese su consulta',
                     ),
                     const SizedBox(height: 15),
                     CustomInput(
                       controlador: consulta,
-                      dialogo: 'Detalle el tema de discución',
+                      dialogo: 'Detalle su consulta',
                       maxLines: 6,
                       maxLength: 300,
                     ),
                     const SizedBox(height: 10),
                     FilledButton(
                       onPressed: () {},
-                      child: Text('Crear Tema'),
+                      child: Text('Crear Consulta'),
                     ),
                   ],
                 );
               });
         },
         child: Text(
-          'Agregar Tema De Discusión',
+          'Agregar Solicitud/Consulta',
           style: TextStyle(fontSize: 16, height: 3),
         ),
         style: FilledButton.styleFrom(backgroundColor: Colors.amberAccent[700]),
