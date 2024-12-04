@@ -104,7 +104,7 @@ class CampoApellido extends StatelessWidget {
       decoration: InputDecoration(
         labelText: 'Apellido',
         labelStyle: const TextStyle(color: Colors.black),
-        prefixIcon: const Icon(Icons.person, color: Colors.black),
+        prefixIcon: const Icon(Icons.person_outline, color: Colors.black),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(10.0),
@@ -187,7 +187,7 @@ class CampoIdentidad extends StatelessWidget {
       decoration: InputDecoration(
         labelText: 'DNI',
         labelStyle: const TextStyle(color: Colors.black),
-        prefixIcon: const Icon(Icons.credit_card, color: Colors.black),
+        prefixIcon: const Icon(Icons.badge, color: Colors.black),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(10.0),
@@ -240,7 +240,7 @@ class CampoMotivo extends StatelessWidget {
       decoration: InputDecoration(
         labelText: 'Motivo',
         labelStyle: const TextStyle(color: Colors.black),
-        prefixIcon: const Icon(Icons.sticky_note_2_outlined, color: Colors.black),
+        prefixIcon: const Icon(Icons.edit_note, color: Colors.black),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(10.0),

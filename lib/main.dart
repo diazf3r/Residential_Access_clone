@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
       debugShowCheckedModeBanner: false,
       home: AnunciarVisita(),
+      //home: const QrApp(),
       onGenerateRoute: (settings) {
         return null;
       }
