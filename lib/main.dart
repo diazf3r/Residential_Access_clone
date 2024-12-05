@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/anunciar_visita.dart';
+
+import 'package:myapp/src/pages/principal.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +16,6 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
       debugShowCheckedModeBanner: false,
       home: AnunciarVisita(),
-      //home: const QrApp(),
       onGenerateRoute: (settings) {
         return null;
       }
