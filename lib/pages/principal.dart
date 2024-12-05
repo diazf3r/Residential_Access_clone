@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/src/pages/anunciar_visita.dart';
+import 'package:myapp/pages/anunciar_visita.dart';
+
 
 void main() {
   runApp(const MyApp());

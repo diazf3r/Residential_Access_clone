@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/conversation_card.dart';
 
 class ListConsultas extends StatelessWidget {
   const ListConsultas({
