@@ -36,7 +36,7 @@ class ForoPage extends StatelessWidget {
               child: ListView.separated(
                 itemCount: 2,
                 itemBuilder: (context, index) {
-                  return ListConsultas(
+                  return const ListConsultas(
                     title: 'ESTO ES UN TITULO',
                     description: 'ESTO ES UNA DESCRIPCION DE ALGO',
                   );
@@ -73,17 +73,17 @@ class ForoPage extends StatelessWidget {
                     const SizedBox(height: 10),
                     FilledButton(
                       onPressed: () {},
-                      child: Text('Crear Consulta'),
+                      child: const Text('Crear Consulta'),
                     ),
                   ],
                 );
               });
         },
+        style: FilledButton.styleFrom(backgroundColor: Colors.amberAccent[700]),
         child: Text(
           'Agregar Solicitud/Consulta',
           style: TextStyle(fontSize: 16, height: 3),
         ),
-        style: FilledButton.styleFrom(backgroundColor: Colors.amberAccent[700]),
       ),
     );
   }

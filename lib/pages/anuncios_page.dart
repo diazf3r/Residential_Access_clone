@@ -34,7 +34,7 @@ class AnuncioPage extends StatelessWidget {
                 child: ListView.separated(
                   itemCount: 3,
                   itemBuilder: (BuildContext context, int index) {
-                    return AnuncioCard(
+                    return const AnuncioCard(
                       title: 'ANUNCIO',
                       description: 'ESTO ES UNA PRUEBA',
                       imagen: NetworkImage(

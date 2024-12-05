@@ -19,6 +19,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,15 +81,15 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               // Botón de menú y perfil
-              Positioned(
+              const Positioned(
                 top: 40,
                 left: 20,
-                child: const Icon(Icons.menu, color: Colors.white),
+                child: Icon(Icons.menu, color: Colors.white),
               ),
-              Positioned(
+              const Positioned(
                 top: 40,
                 right: 20,
-                child: const Icon(Icons.person, color: Colors.white),
+                child: Icon(Icons.person, color: Colors.white),
               ),
             ],
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/principal.dart';
 
-import 'package:myapp/src/pages/principal.dart';
+
 
 
 void main() {
