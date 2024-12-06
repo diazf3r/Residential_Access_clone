@@ -36,7 +36,7 @@ class ForoPage extends StatelessWidget {
               child: ListView.separated(
                 itemCount: 2,
                 itemBuilder: (context, index) {
-                  return const ListConsultas(
+                  return ListConsultas(
                     title: 'ESTO ES UN TITULO',
                     description: 'ESTO ES UNA DESCRIPCION DE ALGO',
                   );
@@ -61,26 +61,45 @@ class ForoPage extends StatelessWidget {
                   actions: [
                     CustomInput(
                       controlador: tema,
+                      maxLines: 2,
                       dialogo: 'Ingrese su consulta',
                     ),
                     const SizedBox(height: 15),
                     CustomInput(
                       controlador: consulta,
                       dialogo: 'Detalle su consulta',
-                      maxLines: 6,
+                      maxLines: 4,
                       maxLength: 300,
                     ),
                     const SizedBox(height: 10),
-                    FilledButton(
-                      onPressed: () {},
-                      child: const Text('Crear Consulta'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              backgroundColor: Colors.red[800]),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            tema.text = '';
+                            consulta.text = '';
+                          },
+                          child: const Text('Cancelar'),
+                        ),
+                        const SizedBox(width: 5),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              backgroundColor: Colors.amberAccent[700]),
+                          onPressed: () {},
+                          child: const Text('Crear Consulta'),
+                        ),
+                      ],
                     ),
                   ],
                 );
               });
         },
         style: FilledButton.styleFrom(backgroundColor: Colors.amberAccent[700]),
-        child: Text(
+        child: const Text(
           'Agregar Solicitud/Consulta',
           style: TextStyle(fontSize: 16, height: 3),
         ),

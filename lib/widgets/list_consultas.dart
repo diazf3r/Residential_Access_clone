@@ -6,9 +6,13 @@ class ListConsultas extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    this.titleRespuesta,
+    this.respuesta,
   });
   final String title;
   final String description;
+  final String? titleRespuesta;
+  final String? respuesta;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +38,8 @@ class ListConsultas extends StatelessWidget {
                         backgroundColor: Colors.amberAccent[100],
                       ),
                       ConversationCard(
-                        title: 'RESPUESTA',
-                        description: 'ESTA ES UNA RESPUESTA',
+                        title: titleRespuesta ?? 'Esperando Respuesta...',
+                        description: respuesta ?? '',
                         titleAlignment: Alignment.centerRight,
                         descriptionAlignment: Alignment.centerRight,
                         backgroundColor: Colors.orange[300],
