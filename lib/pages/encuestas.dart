@@ -8,12 +8,16 @@ class EncuestasPage extends StatefulWidget {
 class _EncuestasPageState extends State<EncuestasPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _encuestaController = TextEditingController();
-  final List<String> _encuestas = [];
+  final List<Encuesta> _encuestas = [];
 
   void _agregarEncuesta() {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _encuestas.add(_encuestaController.text);
+        _encuestas.add(Encuesta(
+          texto: _encuestaController.text,
+          likes: 0,
+          dislikes: 0,
+        ));
         _encuestaController.clear();
       });
     }
@@ -23,8 +27,8 @@ class _EncuestasPageState extends State<EncuestasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
         title: Text('Gestión de Encuestas'),
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,21 +71,74 @@ class _EncuestasPageState extends State<EncuestasPage> {
               child: ListView.builder(
                 itemCount: _encuestas.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(_encuestas[index]),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          setState(() {
-                            _encuestas.removeAt(index);
-                          });
-                        },
-                      ),
-                    ),
+                  return EncuestaTile(
+                    encuesta: _encuestas[index],
+                    onLike: () {
+                      setState(() {
+                        _encuestas[index].likes++;
+                        _encuestas[index].hasLiked = true;
+                      });
+                    },
+                    onDislike: () {
+                      setState(() {
+                        _encuestas[index].dislikes++;
+                        _encuestas[index].hasDisliked = true;
+                      });
+                    },
                   );
                 },
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Encuesta {
+  String texto;
+  int likes;
+  int dislikes;
+  bool hasLiked = false;
+  bool hasDisliked = false;
+
+  Encuesta({required this.texto, this.likes = 0, this.dislikes = 0});
+}
+
+class EncuestaTile extends StatelessWidget {
+  final Encuesta encuesta;
+  final VoidCallback onLike;
+  final VoidCallback onDislike;
+
+  EncuestaTile({
+    required this.encuesta,
+    required this.onLike,
+    required this.onDislike,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(encuesta.texto),
+        subtitle: Text('Likes: ${encuesta.likes} - Dislikes: ${encuesta.dislikes}'),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.thumb_up, color: encuesta.hasLiked ? Colors.grey : Colors.green),
+              onPressed: encuesta.hasLiked ? null : onLike,
+            ),
+            IconButton(
+              icon: Icon(Icons.thumb_down, color: encuesta.hasDisliked ? Colors.grey : Colors.red),
+              onPressed: encuesta.hasDisliked ? null : onDislike,
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                // Acción para eliminar encuesta
+              },
             ),
           ],
         ),
