@@ -94,6 +94,26 @@ class VisitasAgendadas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Verifica si la lista está vacía
+    if (visitas.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No hay visitas agendadas aún.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      });
+
+      // Retorna un mensaje informativo
+      return const Center(
+        child: Text(
+          'No hay visitas agendadas.',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Visitas Generadas'),
@@ -186,4 +206,3 @@ class VisitasAgendadas extends StatelessWidget {
     );
   }
 }
-
