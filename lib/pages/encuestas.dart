@@ -23,6 +23,12 @@ class _EncuestasPageState extends State<EncuestasPage> {
     }
   }
 
+  void _eliminarEncuesta(int index) {
+    setState(() {
+      _encuestas.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,15 +81,32 @@ class _EncuestasPageState extends State<EncuestasPage> {
                     encuesta: _encuestas[index],
                     onLike: () {
                       setState(() {
-                        _encuestas[index].likes++;
-                        _encuestas[index].hasLiked = true;
+                        // Solo permite dar like si no se ha dado dislike previamente
+                        if (!_encuestas[index].hasDisliked) {
+                          _encuestas.forEach((e) {
+                            e.hasLiked = false;
+                            e.hasDisliked = false;
+                          });
+                          _encuestas[index].hasLiked = true;
+                          _encuestas[index].likes++;
+                        }
                       });
                     },
                     onDislike: () {
                       setState(() {
-                        _encuestas[index].dislikes++;
-                        _encuestas[index].hasDisliked = true;
+                        // Solo permite dar dislike si no se ha dado like previamente
+                        if (!_encuestas[index].hasLiked) {
+                          _encuestas.forEach((e) {
+                            e.hasLiked = false;
+                            e.hasDisliked = false;
+                          });
+                          _encuestas[index].hasDisliked = true;
+                          _encuestas[index].dislikes++;
+                        }
                       });
+                    },
+                    onDelete: () {
+                      _eliminarEncuesta(index);
                     },
                   );
                 },
@@ -110,11 +133,13 @@ class EncuestaTile extends StatelessWidget {
   final Encuesta encuesta;
   final VoidCallback onLike;
   final VoidCallback onDislike;
+  final VoidCallback onDelete;
 
   EncuestaTile({
     required this.encuesta,
     required this.onLike,
     required this.onDislike,
+    required this.onDelete,
   });
 
   @override
@@ -136,9 +161,7 @@ class EncuestaTile extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
-              onPressed: () {
-                // Acción para eliminar encuesta
-              },
+              onPressed: onDelete,
             ),
           ],
         ),
