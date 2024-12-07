@@ -3,14 +3,14 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'anunciar_visita.dart';
 import 'visita.dart';
 
-class VisitasScreen extends StatefulWidget {
-  const VisitasScreen({super.key});
+class PantallaTipoVisita extends StatefulWidget {
+  const PantallaTipoVisita({super.key});
 
   @override
-  State<VisitasScreen> createState() => _VisitasScreenState();
+  State<PantallaTipoVisita> createState() => _PantallaTipoVisitaState();
 }
 
-class _VisitasScreenState extends State<VisitasScreen> {
+class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   // Lista compartida de visitas agendadas
   final List<Visita> visitasAgendadas = [];
 
