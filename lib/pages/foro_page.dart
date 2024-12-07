@@ -60,16 +60,40 @@ class ForoPage extends StatelessWidget {
                   actionsPadding: const EdgeInsets.all(15),
                   actions: [
                     CustomInput(
-                      controlador: tema,
-                      maxLines: 2,
-                      dialogo: 'Ingrese su consulta',
+                      controller: tema,
+                      maxlines: 2,
+                      label: 'Ingrese su consulta',
+                      // TODO; change validators
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'El correo es obligatorio';
+                        }
+
+                        if (!value.contains('@')) {
+                          return 'El correo no es válido';
+                        }
+
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 15),
                     CustomInput(
-                      controlador: consulta,
-                      dialogo: 'Detalle su consulta',
-                      maxLines: 4,
+                      controller: consulta,
+                      label: 'Detalle su consulta',
+                      maxlines: 4,
                       maxLength: 300,
+                      // TODO: change validators
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'El correo es obligatorio';
+                        }
+
+                        if (!value.contains('@')) {
+                          return 'El correo no es válido';
+                        }
+
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 10),
                     Row(

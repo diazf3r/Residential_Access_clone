@@ -26,44 +26,81 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue, Colors.teal],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(32.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
-                const Text("Login",
-                    style:
-                        TextStyle(fontSize: 40, fontWeight: FontWeight.w500)),
+                const Text(
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
                 const SizedBox(height: 50),
                 CustomInput(
-                  controlador: _email,
-                  dialogo: "Email",
+                  controller: _email,
+                  label: "Correo",
+                  icon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'El correo es obligatorio';
+                    }
+
+                    if (!value.contains('@')) {
+                      return 'El correo no es válido';
+                    }
+
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 20),
                 CustomInput(
-                  controlador: _password,
-                  dialogo: "Password",
+                  controller: _password,
+                  label: "Contraseña",
+                  icon: Icons.lock,
+                  keyboardType: TextInputType.visiblePassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Ingrese la contraseña';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.teal,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
+                    textStyle: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () => _login(),
-                  child: const Text('Iniciar sesion'),
+                  child: const Text('Iniciar Sesión'),
                 ),
               ],
             ),
           ),
-        ]),
+        ),
       ),
     );
   }
 
-  goToHome(BuildContext context) => Navigator.push(
+  goToHome() => Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
@@ -73,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
-      goToHome(context);
+      goToHome();
     }
   }
 }
