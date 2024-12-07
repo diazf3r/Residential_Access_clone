@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/anunciar_visita.dart';
+import 'package:myapp/widgets/profile.dart';
 
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+// Modificación en HomePage
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -86,10 +87,18 @@ class HomePage extends StatelessWidget {
                 left: 20,
                 child: Icon(Icons.menu, color: Colors.white),
               ),
-              const Positioned(
+              Positioned(
                 top: 40,
                 right: 20,
-                child: Icon(Icons.person, color: Colors.white),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  ProfilePage()),
+                    );
+                  },
+                  child: const Icon(Icons.person, color: Colors.white),
+                ),
               ),
             ],
           ),
