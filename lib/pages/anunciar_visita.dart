@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/visita.dart';
 import 'package:myapp/widgets/inputs.dart';
+
 class AnunciarVisita extends StatelessWidget {
   AnunciarVisita({super.key});
 
@@ -87,53 +88,62 @@ class AnunciarVisita extends StatelessWidget {
 
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState?.validate() ?? false) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VisitaCreada(
-                            nombre: nombreController.text,
-                            apellido: apellidoController.text,
-                            identidad: identidadController.text,
-                            motivo: motivoController.text,
-                            fecha: fechaController.text,
-                            hora: horaController.text,
-                          ),
+                onPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    // Mostrar un mensaje emergente de confirmación
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('¡La visita ha sido anunciada correctamente!'),
+                        duration: Duration(seconds: 2), // Duración del mensaje
+                      ),
+                    );
+
+                    // Navegar a la pantalla de detalles
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VisitaCreada(
+                          nombre: nombreController.text,
+                          apellido: apellidoController.text,
+                          identidad: identidadController.text,
+                          motivo: motivoController.text,
+                          fecha: fechaController.text,
+                          hora: horaController.text,
                         ),
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Campos incompletos'),
-                          content: const Text(
-                            'Por favor, complete todos los campos correctamente antes de continuar.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Cerrar'),
-                            ),
-                          ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Campos incompletos'),
+                        content: const Text(
+                          'Por favor, complete todos los campos correctamente antes de continuar.',
                         ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange[200],
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cerrar'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange[200],
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                     elevation: 5,
                   ),
                   child: const Text(
                     '¡Anunciar Visita!',
                     style: TextStyle(fontSize: 18),
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/anunciar_visita.dart';
+import 'package:myapp/pages/anuncios_page.dart';
 import 'package:myapp/pages/delivery.dart';
+import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/widgets/profile.dart';
 
 
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
@@ -115,8 +117,8 @@ class HomePage extends StatelessWidget {
                 children: [
                   _buildOption(context, Icons.home, 'VISITAS', AnunciarVisita()),
                   _buildOption(context, Icons.delivery_dining, 'DELIVERY', PantallaDelivery() ),
-                  _buildOption(context, Icons.notifications, 'ANUNCIOS', AnunciarVisita() ),
-                  _buildOption(context, Icons.chat, 'SUGERENCIAS', AnunciarVisita() ),
+                  _buildOption(context, Icons.notifications, 'ANUNCIOS', const AnuncioPage() ),
+                  _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage() ),
                   _buildOption(context, Icons.calendar_month, 'RESERVAS', AnunciarVisita() ),
                   _buildOption(context, Icons.bar_chart, 'ENCUESTAS', AnunciarVisita() ),
                 ],

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/principal.dart';
 
-
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -16,7 +13,7 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         title: 'Material App',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
       onGenerateRoute: (settings) {
         return null;
       }
