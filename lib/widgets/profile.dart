@@ -5,7 +5,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: const Text('Perfil'),
         centerTitle: true,
         backgroundColor: Colors.orange,
       ),
@@ -20,10 +20,10 @@ class ProfilePage extends StatelessWidget {
                 
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/perfil.jpg'), // Imagen local
+                  backgroundImage: const AssetImage('assets/perfil.jpg'), // Imagen local
                   backgroundColor: Colors.orange.shade100,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Nombre del usuario
                 Text(
                   'Juan Pérez',
@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Correo del usuario
                 Text(
                   'juan.perez@example.com',
@@ -44,9 +44,9 @@ class ProfilePage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Información adicional
-                Divider(),
+                const Divider(),
                 ListTile(
                   leading: Icon(Icons.phone, color: Colors.orange),
                   title: Text('Teléfono'),
@@ -69,11 +69,11 @@ class ProfilePage extends StatelessWidget {
                     // Aquí puedes implementar la funcionalidad de cierre de sesión
                     print('Cerrar sesión');
                   },
-                  icon: Icon(Icons.logout),
-                  label: Text('Cerrar sesión'),
+                  icon: const Icon(Icons.logout),
+                  label: const Text('Cerrar sesión'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange, // Color del botón
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
