@@ -4,6 +4,7 @@ import 'package:myapp/pages/anuncios_page.dart';
 import 'package:myapp/pages/delivery.dart';
 import 'package:myapp/pages/encuestas.dart';
 import 'package:myapp/pages/foro_page.dart';
+import 'package:myapp/pages/gestionar_visitas.dart';
 import 'package:myapp/widgets/profile.dart';
 
 
@@ -116,11 +117,11 @@ class HomePage extends StatelessWidget {
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 children: [
-                  _buildOption(context, Icons.home, 'VISITAS', AnunciarVisita()),
+                  _buildOption(context, Icons.home, 'VISITAS', AnunciarVisita(onVisitaCreada: (Visita ) {  },)),
                   _buildOption(context, Icons.delivery_dining, 'DELIVERY', PantallaDelivery() ),
                   _buildOption(context, Icons.notifications, 'ANUNCIOS', const AnuncioPage() ),
                   _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage() ),
-                  _buildOption(context, Icons.calendar_month, 'RESERVAS', AnunciarVisita() ),
+                  _buildOption(context, Icons.calendar_month, 'GESTIÓN DE VISITAS', const GestionarVisitas() ),
                   _buildOption(context, Icons.bar_chart, 'ENCUESTAS', EncuestasPage() ),
                 ],
               ),

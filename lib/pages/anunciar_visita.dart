@@ -3,7 +3,9 @@ import 'package:myapp/pages/visita.dart';
 import 'package:myapp/widgets/inputs.dart';
 
 class AnunciarVisita extends StatelessWidget {
-  AnunciarVisita({super.key});
+  final Function(Visita) onVisitaCreada;
+
+  AnunciarVisita({super.key, required this.onVisitaCreada});
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController apellidoController = TextEditingController();
@@ -13,7 +15,7 @@ class AnunciarVisita extends StatelessWidget {
   final TextEditingController horaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-    // Focus nodes para rastrear cada campo
+  // Focus nodes para rastrear cada campo
   final FocusNode nombreFocusNode = FocusNode();
   final FocusNode apellidoFocusNode = FocusNode();
   final FocusNode identidadFocusNode = FocusNode();
@@ -24,11 +26,6 @@ class AnunciarVisita extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-       
-        centerTitle: true,
-        backgroundColor: Colors.orange,
-      ),
       backgroundColor: Colors.orange,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -90,58 +87,53 @@ class AnunciarVisita extends StatelessWidget {
               horaController: horaController,
             ),
             const SizedBox(height: 30),
-
-                const SizedBox(height: 30),
                 ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState?.validate() ?? false) {
-                    // Mostrar un mensaje emergente de confirmación
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('¡La visita ha sido anunciada correctamente!'),
-                        duration: Duration(seconds: 2), // Duración del mensaje
-                      ),
-                    );
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      final nuevaVisita = Visita(
+                        nombre: nombreController.text,
+                        apellido: apellidoController.text,
+                        identidad: identidadController.text,
+                        motivo: motivoController.text,
+                        fecha: fechaController.text,
+                        hora: horaController.text,
+                      );
 
-                    // Navegar a la pantalla de detalles
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VisitaCreada(
-                          nombre: nombreController.text,
-                          apellido: apellidoController.text,
-                          identidad: identidadController.text,
-                          motivo: motivoController.text,
-                          fecha: fechaController.text,
-                          hora: horaController.text,
+                      onVisitaCreada(nuevaVisita);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('¡La visita ha sido anunciada correctamente!'),
+                          duration: Duration(seconds: 2),
                         ),
-                      ),
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Campos incompletos'),
-                        content: const Text(
-                          'Por favor, complete todos los campos correctamente antes de continuar.',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Cerrar'),
+                      );
+
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Campos incompletos'),
+                          content: const Text(
+                            'Por favor, complete todos los campos correctamente antes de continuar.',
                           ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange[200],
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Cerrar'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange[200],
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     elevation: 5,
                   ),
                   child: const Text(
@@ -156,4 +148,22 @@ class AnunciarVisita extends StatelessWidget {
       ),
     );
   }
+}
+
+class Visita {
+  final String nombre;
+  final String apellido;
+  final String identidad;
+  final String motivo;
+  final String fecha;
+  final String hora;
+
+  Visita({
+    required this.nombre,
+    required this.apellido,
+    required this.identidad,
+    required this.motivo,
+    required this.fecha,
+    required this.hora,
+  });
 }
