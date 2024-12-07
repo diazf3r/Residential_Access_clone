@@ -24,6 +24,11 @@ class AnunciarVisita extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+       
+        centerTitle: true,
+        backgroundColor: Colors.orange,
+      ),
       backgroundColor: Colors.orange,
       body: Padding(
         padding: const EdgeInsets.all(20.0),

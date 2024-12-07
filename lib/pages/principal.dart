@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/pages/anunciar_visita.dart';
 import 'package:myapp/pages/anuncios_page.dart';
 import 'package:myapp/pages/delivery.dart';
+import 'package:myapp/pages/encuestas.dart';
 import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/widgets/profile.dart';
 
@@ -120,7 +121,7 @@ class HomePage extends StatelessWidget {
                   _buildOption(context, Icons.notifications, 'ANUNCIOS', const AnuncioPage() ),
                   _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage() ),
                   _buildOption(context, Icons.calendar_month, 'RESERVAS', AnunciarVisita() ),
-                  _buildOption(context, Icons.bar_chart, 'ENCUESTAS', AnunciarVisita() ),
+                  _buildOption(context, Icons.bar_chart, 'ENCUESTAS', EncuestasPage() ),
                 ],
               ),
             ),
