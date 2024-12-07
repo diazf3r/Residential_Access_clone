@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/anunciar_visita.dart';
+import 'package:myapp/pages/delivery.dart';
 import 'package:myapp/widgets/profile.dart';
 
 
@@ -113,7 +114,7 @@ class HomePage extends StatelessWidget {
                 mainAxisSpacing: 20,
                 children: [
                   _buildOption(context, Icons.home, 'VISITAS', AnunciarVisita()),
-                  _buildOption(context, Icons.payment, 'PAGOS', AnunciarVisita() ),
+                  _buildOption(context, Icons.delivery_dining, 'DELIVERY', PantallaDelivery() ),
                   _buildOption(context, Icons.notifications, 'ANUNCIOS', AnunciarVisita() ),
                   _buildOption(context, Icons.chat, 'SUGERENCIAS', AnunciarVisita() ),
                   _buildOption(context, Icons.calendar_month, 'RESERVAS', AnunciarVisita() ),
