@@ -7,9 +7,9 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Perfil'),
         centerTitle: true,
-        backgroundColor: Colors.orange, // Color de la AppBar
+        backgroundColor: Colors.orange,
       ),
-      body: Center( // Centrar todos los elementos
+      body: Center( 
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -17,10 +17,10 @@ class ProfilePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
               children: [
-                // Avatar del perfil
+                
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/avatar.jpg'), // Imagen local
+                  backgroundImage: AssetImage('assets/perfil.jpg'), // Imagen local
                   backgroundColor: Colors.orange.shade100,
                 ),
                 SizedBox(height: 16),
@@ -50,7 +50,7 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.phone, color: Colors.orange),
                   title: Text('Teléfono'),
-                  subtitle: Text('+1 234 567 890'),
+                  subtitle: Text('+504 8739 9832'),
                 ),
                 ListTile(
                   leading: Icon(Icons.location_on, color: Colors.orange),
@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.cake, color: Colors.orange),
                   title: Text('Fecha de nacimiento'),
-                  subtitle: Text('15 de marzo de 1990'),
+                  subtitle: Text('15 de marzo de 2002'),
                 ),
                 SizedBox(height: 20),
                 // Botón de cierre de sesión
