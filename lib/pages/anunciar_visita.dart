@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/visita.dart';
 import 'package:myapp/widgets/inputs.dart';
+
 class AnunciarVisita extends StatelessWidget {
-  AnunciarVisita({super.key});
+  final Function(Visita) onVisitaCreada;
+
+  AnunciarVisita({super.key, required this.onVisitaCreada});
 
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController apellidoController = TextEditingController();
@@ -12,7 +14,7 @@ class AnunciarVisita extends StatelessWidget {
   final TextEditingController horaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-    // Focus nodes para rastrear cada campo
+  // Focus nodes para rastrear cada campo
   final FocusNode nombreFocusNode = FocusNode();
   final FocusNode apellidoFocusNode = FocusNode();
   final FocusNode identidadFocusNode = FocusNode();
@@ -84,24 +86,28 @@ class AnunciarVisita extends StatelessWidget {
               horaController: horaController,
             ),
             const SizedBox(height: 30),
-
-                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
                     if (formKey.currentState?.validate() ?? false) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VisitaCreada(
-                            nombre: nombreController.text,
-                            apellido: apellidoController.text,
-                            identidad: identidadController.text,
-                            motivo: motivoController.text,
-                            fecha: fechaController.text,
-                            hora: horaController.text,
-                          ),
+                      final nuevaVisita = Visita(
+                        nombre: nombreController.text,
+                        apellido: apellidoController.text,
+                        identidad: identidadController.text,
+                        motivo: motivoController.text,
+                        fecha: fechaController.text,
+                        hora: horaController.text,
+                      );
+
+                      onVisitaCreada(nuevaVisita);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('¡La visita ha sido anunciada correctamente!'),
+                          duration: Duration(seconds: 2),
                         ),
                       );
+
+                      Navigator.pop(context);
                     } else {
                       showDialog(
                         context: context,
@@ -133,7 +139,7 @@ class AnunciarVisita extends StatelessWidget {
                     '¡Anunciar Visita!',
                     style: TextStyle(fontSize: 18),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -141,4 +147,22 @@ class AnunciarVisita extends StatelessWidget {
       ),
     );
   }
+}
+
+class Visita {
+  final String nombre;
+  final String apellido;
+  final String identidad;
+  final String motivo;
+  final String fecha;
+  final String hora;
+
+  Visita({
+    required this.nombre,
+    required this.apellido,
+    required this.identidad,
+    required this.motivo,
+    required this.fecha,
+    required this.hora,
+  });
 }

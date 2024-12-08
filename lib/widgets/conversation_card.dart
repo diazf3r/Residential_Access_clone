@@ -44,6 +44,7 @@ class ConversationCard extends StatelessWidget {
                   alignment: descriptionAlignment ?? Alignment.centerLeft,
                   child: Text(
                     description,
+                    overflow: TextOverflow.fade,
                     style: const TextStyle(
                         fontWeight: FontWeight.w400, fontSize: 15),
                   )),

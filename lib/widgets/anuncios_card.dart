@@ -10,7 +10,7 @@ class AnuncioCard extends StatelessWidget {
 
   final String title;
   final String description;
-  final NetworkImage imagen;
+  final String imagen;
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +19,36 @@ class AnuncioCard extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
+                  icon: const Icon(Icons.notification_important_sharp),
                   title: Text(
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.amberAccent[400],
-                        fontWeight: FontWeight.w400,
-                        fontSize: 23),
+                      color: Colors.amberAccent[400],
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                    ),
                   ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image(
-                        image: imagen,
+                        image: NetworkImage(imagen),
                         fit: BoxFit.cover,
                       ),
                       const SizedBox(height: 10),
-                      SizedBox(
-                        height: 160,
+                      Container(
+                        alignment: Alignment.center,
+                        height: 180,
                         child: SingleChildScrollView(
                           child: Text(
                             description,
+                            overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.blueGrey[400],
-                                fontWeight: FontWeight.w300),
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16),
                           ),
                         ),
                       ),
@@ -51,8 +57,7 @@ class AnuncioCard extends StatelessWidget {
                           height: 100,
                           width: 100,
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://www.laprensa.hn/binrepository/1278x1277/0c99/1278d1080/none/11004/AGYS/448769750-790555046551042-21150748269_7791397_20240618190144.jpg'))
+                          image: AssetImage('assets/images/logo_sistemas.png'))
                     ],
                   ),
                 ));
@@ -73,8 +78,9 @@ class AnuncioCard extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     fontSize: 23),
               ),
+              const SizedBox(height: 8),
               Text(
-                maxLines: 4,
+                maxLines: 3,
                 description,
                 style: TextStyle(
                     color: Colors.blueGrey[400], fontWeight: FontWeight.w300),
@@ -86,9 +92,9 @@ class AnuncioCard extends StatelessWidget {
                   Center(
                     child: Image(
                       fit: BoxFit.contain,
-                      image: imagen,
+                      image: NetworkImage(imagen),
                       width: 120,
-                      height: 160,
+                      height: 150,
                     ),
                   ),
                   Positioned(

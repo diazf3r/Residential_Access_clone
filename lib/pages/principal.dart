@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/anunciar_visita.dart';
+import 'package:myapp/pages/anuncios_page.dart';
+import 'package:myapp/pages/delivery.dart';
+import 'package:myapp/pages/encuestas.dart';
+import 'package:myapp/pages/foro_page.dart';
+import 'package:myapp/pages/tipo_visita.dart';
 import 'package:myapp/widgets/profile.dart';
 
 
@@ -108,16 +112,17 @@ class HomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GridView.count(
-                crossAxisCount: 3,
+                crossAxisCount: 2,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 children: [
-                  _buildOption(context, Icons.home, 'VISITAS', AnunciarVisita()),
-                  _buildOption(context, Icons.payment, 'PAGOS', AnunciarVisita() ),
-                  _buildOption(context, Icons.notifications, 'ANUNCIOS', AnunciarVisita() ),
-                  _buildOption(context, Icons.chat, 'SUGERENCIAS', AnunciarVisita() ),
-                  _buildOption(context, Icons.calendar_month, 'RESERVAS', AnunciarVisita() ),
-                  _buildOption(context, Icons.bar_chart, 'ENCUESTAS', AnunciarVisita() ),
+                  //_buildOption(context, Icons.home, 'VISITAS', AnunciarVisita(onVisitaCreada: (Visita ) {  },)),
+                  //_buildOption(context, Icons.home, 'VISITAS', const GestionarVisitas()),
+                  _buildOption(context, Icons.calendar_month, 'GESTIÓN DE VISITAS', const PantallaTipoVisita() ),
+                  _buildOption(context, Icons.notifications, 'ANUNCIOS', const AnuncioPage() ),
+                  _buildOption(context, Icons.delivery_dining, 'DELIVERY', PantallaDelivery() ),
+                  _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage() ),
+                  _buildOption(context, Icons.bar_chart, 'ENCUESTAS', EncuestasPage() ),
                 ],
               ),
             ),
