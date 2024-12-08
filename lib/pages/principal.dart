@@ -9,31 +9,19 @@ import 'package:myapp/pages/tipo_visita.dart';
 import 'package:myapp/widgets/profile.dart';
 
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    );
-  }
-}
-// Modificación en HomePage
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+     
+
       body: Column(
         children: [
-          // Parte superior naranja personalizada
+         
           Stack(
             children: [
               ClipPath(
@@ -49,7 +37,7 @@ class HomePage extends StatelessWidget {
                 right: 0,
                 child: Column(
                   children: [
-                    // Círculo con el texto "Access"
+                    
                     Container(
                       height: 80,
                       width: 80,
@@ -88,11 +76,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               // Botón de menú y perfil
-              const Positioned(
-                top: 40,
-                left: 20,
-                child: Icon(Icons.menu, color: Colors.white),
-              ),
+             
               Positioned(
                 top: 40,
                 right: 20,
