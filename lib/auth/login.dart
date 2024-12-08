@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue, Colors.teal],
+            colors: [Color.fromARGB(255, 214, 171, 106), Colors.white],
           ),
         ),
         child: Center(
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.teal,
+                    foregroundColor: Colors.orange,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 15),
                     textStyle: const TextStyle(

@@ -10,8 +10,8 @@ class CustomInput extends StatefulWidget {
     required this.validator,
     this.obscureText = false,
     this.icon = Icons.person,
-    this.maxLength = 10,
-    this.maxlines,
+    this.maxLength,
+    this.maxlines = 1,
     this.keyboardType = TextInputType.text,
   });
 
@@ -21,7 +21,7 @@ class CustomInput extends StatefulWidget {
   var keyboardType;
   var label;
   var controller;
-  var maxlines;
+  int? maxlines;
   bool obscureText;
 
   @override
