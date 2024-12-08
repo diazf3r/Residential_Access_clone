@@ -57,8 +57,7 @@ class AnuncioCard extends StatelessWidget {
                           height: 100,
                           width: 100,
                           fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://www.laprensa.hn/binrepository/1278x1277/0c99/1278d1080/none/11004/AGYS/448769750-790555046551042-21150748269_7791397_20240618190144.jpg'))
+                          image: AssetImage('assets/images/logo_sistemas.png'))
                     ],
                   ),
                 ));
