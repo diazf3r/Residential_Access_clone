@@ -10,7 +10,7 @@ class AnuncioCard extends StatelessWidget {
 
   final String title;
   final String description;
-  final NetworkImage imagen;
+  final String imagen;
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +19,36 @@ class AnuncioCard extends StatelessWidget {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
+                  icon: const Icon(Icons.notification_important_sharp),
                   title: Text(
                     title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.amberAccent[400],
-                        fontWeight: FontWeight.w400,
-                        fontSize: 23),
+                      color: Colors.amberAccent[400],
+                      fontWeight: FontWeight.w400,
+                      fontSize: 23,
+                    ),
                   ),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image(
-                        image: imagen,
+                        image: NetworkImage(imagen),
                         fit: BoxFit.cover,
                       ),
                       const SizedBox(height: 10),
-                      SizedBox(
-                        height: 160,
+                      Container(
+                        alignment: Alignment.center,
+                        height: 180,
                         child: SingleChildScrollView(
                           child: Text(
                             description,
+                            overflow: TextOverflow.fade,
                             style: TextStyle(
                                 color: Colors.blueGrey[400],
-                                fontWeight: FontWeight.w300),
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16),
                           ),
                         ),
                       ),
@@ -73,8 +79,9 @@ class AnuncioCard extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     fontSize: 23),
               ),
+              const SizedBox(height: 8),
               Text(
-                maxLines: 4,
+                maxLines: 3,
                 description,
                 style: TextStyle(
                     color: Colors.blueGrey[400], fontWeight: FontWeight.w300),
@@ -86,9 +93,9 @@ class AnuncioCard extends StatelessWidget {
                   Center(
                     child: Image(
                       fit: BoxFit.contain,
-                      image: imagen,
+                      image: NetworkImage(imagen),
                       width: 120,
-                      height: 160,
+                      height: 150,
                     ),
                   ),
                   Positioned(

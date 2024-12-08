@@ -14,6 +14,7 @@ class CustomInput extends StatelessWidget {
   final String dialogo;
   int maxLines;
   int? maxLength;
+
   @override
   Widget build(BuildContext context) {
     return TextField(

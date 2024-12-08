@@ -17,6 +17,7 @@ class ListConsultas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: const Icon(Icons.person),
       title: Title(
         color: const Color(0xFF42A5F5),
         child: Text(title),
@@ -31,6 +32,7 @@ class ListConsultas extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
+                    icon: const Icon(Icons.people_alt_rounded),
                     actions: [
                       ConversationCard(
                         title: title,

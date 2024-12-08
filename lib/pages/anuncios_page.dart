@@ -37,8 +37,7 @@ class AnuncioPage extends StatelessWidget {
                     return const AnuncioCard(
                       title: 'ANUNCIO',
                       description: 'ESTO ES UNA PRUEBA',
-                      imagen: NetworkImage(
-                          'https://th.bing.com/th/id/R.3bcb36f3d4774fb93fbe48d0a25737eb?rik=WXX7B4olBgn8TQ&riu=http%3a%2f%2f4.bp.blogspot.com%2f-DYVbSKM0xGQ%2fUnKclbsDugI%2fAAAAAAAAAI0%2fv3FhyPcK02Y%2fs1600%2fimagenes-de-perritos-bonitos.jpg&ehk=uY%2bcX0a3udlR4%2bcaEqFEHaDmly9dBmwI4ktryOKByl8%3d&risl=&pid=ImgRaw&r=0'),
+                      imagen: '',
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
