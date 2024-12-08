@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'anunciar_visita.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async'; // Importar Async
 
 class PantallaTipoVisita extends StatefulWidget {
   const PantallaTipoVisita({super.key});
@@ -11,13 +13,39 @@ class PantallaTipoVisita extends StatefulWidget {
 
 class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   // Lista compartida de visitas agendadas
-  final List<Visita> visitasAgendadas = [];
-
-  // Función para agregar una visita a la lista
+  List<Visita> visitasAgendadas = [];
   void agregarVisita(Visita visita) {
     setState(() {
       visitasAgendadas.add(visita);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _obtenerVisitasAgendadas();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _obtenerVisitasAgendadas() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('visitas').get();
+      setState(() {
+        visitasAgendadas =
+            snapshot.docs.map((doc) => Visita).cast<Visita>().toList();
+      });
+    } catch (e) {
+      print('Error al obtener las visitas agendadas: $e');
+      // Manejar el error, por ejemplo, mostrando un mensaje al usuario
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al cargar las visitas agendadas'),
+      ));
+    }
   }
 
   @override
@@ -38,14 +66,18 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
           children: [
             // Pasar la función para agregar visitas como parámetro
             VisitasOnDemand(onAgregarVisita: agregarVisita),
-            // Mostrar las visitas agendadas
-            VisitasAgendadas(
-              visitas: visitasAgendadas,
-              onVisitaEliminada: (index) {
-                setState(() {
-                  visitasAgendadas.removeAt(index);
-                });
-              },
+            // Refrescar las visitas agendadas cuando se cambia a esta pestaña
+            RefreshIndicator(
+              onRefresh:
+                  _obtenerVisitasAgendadas, // Llamar a la función para refrescar
+              child: VisitasAgendadas(
+                visitas: visitasAgendadas,
+                onVisitaEliminada: (index) {
+                  setState(() {
+                    visitasAgendadas.removeAt(index);
+                  });
+                },
+              ),
             ),
           ],
         ),
@@ -79,7 +111,6 @@ class VisitasOnDemand extends StatelessWidget {
     );
   }
 }
-
 
 class VisitasAgendadas extends StatelessWidget {
   final List<Visita> visitas;
@@ -146,16 +177,23 @@ class VisitasAgendadas extends StatelessWidget {
                     return AlertDialog(
                       title: const Text('Código QR de la Visita'),
                       content: PrettyQrView.data(
-                        data: 'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
-                       errorCorrectLevel: QrErrorCorrectLevel.H,
-                      decoration: const PrettyQrDecoration(
-                      shape: PrettyQrSmoothSymbol(),
-                      image: PrettyQrDecorationImage(
-                      image: AssetImage('images/flutter.png'),
-                    position: PrettyQrDecorationImagePosition.embedded,
+                        data:
+                            'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
+                        errorCorrectLevel: QrErrorCorrectLevel.H,
+                        decoration: const PrettyQrDecoration(
+                          shape: PrettyQrSmoothSymbol(),
+                          image: PrettyQrDecorationImage(
+                            image: AssetImage('images/flutter.png'),
+                            position: PrettyQrDecorationImagePosition.embedded,
+                          ),
+                        ),
                       ),
-                      ),),
-                      );
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cerrar'))
+                      ],
+                    );
                   },
                 );
                 return false; // No eliminar el ítem
@@ -176,7 +214,8 @@ class VisitasAgendadas extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                          child: const Text('Eliminar',
+                              style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     );

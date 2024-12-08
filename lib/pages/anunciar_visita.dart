@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/widgets/inputs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AnunciarVisita extends StatelessWidget {
   final Function(Visita) onVisitaCreada;
@@ -21,6 +23,8 @@ class AnunciarVisita extends StatelessWidget {
   final FocusNode motivoFocusNode = FocusNode();
   final FocusNode fechaFocusNode = FocusNode();
   final FocusNode horaFocusNode = FocusNode();
+
+  final CollectionReference visitasCollection = FirebaseFirestore.instance.collection('visitas');
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +103,16 @@ class AnunciarVisita extends StatelessWidget {
                       );
 
                       onVisitaCreada(nuevaVisita);
+
+                      // Guardar la visita en Firestore
+                      visitasCollection.add({
+                        'nombre': nuevaVisita.nombre,
+                        'apellido': nuevaVisita.apellido,
+                        'identidad': nuevaVisita.identidad,
+                        'motivo': nuevaVisita.motivo,
+                        'fecha': nuevaVisita.fecha,
+                        'hora': nuevaVisita.hora,
+                      });
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
