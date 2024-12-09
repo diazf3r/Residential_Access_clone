@@ -67,8 +67,8 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
           title: const Text('Gestión de Visitas'),
           bottom: const TabBar(
             tabs: [
-              Tab(text: 'On-Demand', icon: Icon(Icons.flash_on)),
-              Tab(text: 'Agendadas', icon: Icon(Icons.calendar_today)),
+              Tab(text: 'Anunciar', icon: Icon(Icons.flash_on)),
+              Tab(text: 'Lista de visitas', icon: Icon(Icons.calendar_today)),
             ],
           ),
         ),

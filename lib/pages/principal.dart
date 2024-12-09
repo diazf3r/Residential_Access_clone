@@ -69,12 +69,6 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              // Botón de menú y perfil
-              const Positioned(
-                top: 40,
-                left: 20,
-                child: Icon(Icons.menu, color: Colors.white),
-              ),
               Positioned(
                 top: 40,
                 right: 20,
