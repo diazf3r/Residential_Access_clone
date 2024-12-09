@@ -97,59 +97,61 @@ class ForoPage extends StatelessWidget {
           showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  scrollable: true,
-                  actionsPadding: const EdgeInsets.all(15),
-                  actions: [
-                    CustomInput2(
-                      controlador: tema,
-                      maxLines: 2,
-                      dialogo: 'Ingrese su consulta',
-                    ),
-                    const SizedBox(height: 15),
-                    CustomInput2(
-                      controlador: consulta,
-                      dialogo: 'Detalle su consulta',
-                      maxLines: 4,
-                      maxLength: 300,
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                              backgroundColor: Colors.red[800]),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            tema.text = '';
-                            consulta.text = '';
-                          },
-                          child: const Text('Cancelar'),
-                        ),
-                        const SizedBox(width: 5),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                              backgroundColor: Colors.amberAccent[700]),
-                          onPressed: () {
-                            if (tema.text.isEmpty || consulta.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'No puede subir una consulta con algún campo vacio')));
-                            } else {
-                              final nuevaConsulta = Foro(
-                                  title: tema.text, description: consulta.text);
-
-                              ref.add(nuevaConsulta.toJson());
+                return SingleChildScrollView(
+                  child: AlertDialog(
+                    scrollable: true,
+                    actionsPadding: const EdgeInsets.all(15),
+                    actions: [
+                      CustomInput2(
+                        controlador: tema,
+                        maxLines: 2,
+                        dialogo: 'Ingrese su consulta',
+                      ),
+                      const SizedBox(height: 15),
+                      CustomInput2(
+                        controlador: consulta,
+                        dialogo: 'Detalle su consulta',
+                        maxLines: 4,
+                        maxLength: 300,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                                backgroundColor: Colors.red[800]),
+                            onPressed: () {
                               Navigator.pop(context);
-                            }
-                          },
-                          child: const Text('Crear Consulta'),
-                        ),
-                      ],
-                    ),
-                  ],
+                              tema.text = '';
+                              consulta.text = '';
+                            },
+                            child: const Text('Cancelar'),
+                          ),
+                          const SizedBox(width: 5),
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                                backgroundColor: Colors.amberAccent[700]),
+                            onPressed: () {
+                              if (tema.text.isEmpty || consulta.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'No puede subir una consulta con algún campo vacio')));
+                              } else {
+                                final nuevaConsulta = Foro(
+                                    title: tema.text, description: consulta.text);
+                  
+                                ref.add(nuevaConsulta.toJson());
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text('Crear Consulta'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               });
         },

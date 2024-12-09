@@ -31,35 +31,38 @@ class AnuncioCard extends StatelessWidget {
                       fontSize: 23,
                     ),
                   ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image(
-                        image: NetworkImage(imagen),
-                        fit: BoxFit.cover,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 130,
-                        child: SingleChildScrollView(
-                          child: Text(
-                            description,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.blueGrey[400],
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: NetworkImage(imagen),
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 130,
+                          child: SingleChildScrollView(
+                            child: Text(
+                              description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.blueGrey[400],
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 16),
+                            ),
                           ),
                         ),
-                      ),
-                      const Image(
-                          height: 80,
-                          width: 100,
-                          fit: BoxFit.fitHeight,
-                          image: AssetImage('assets/images/logo_sistemas.png'))
-                    ],
+                        const Image(
+                            height: 80,
+                            width: 100,
+                            fit: BoxFit.fitHeight,
+                            image:
+                                AssetImage('assets/images/logo_sistemas.png'))
+                      ],
+                    ),
                   ),
                 ));
       },

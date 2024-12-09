@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/widgets/inputs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -102,8 +103,7 @@ class AnunciarVisita extends StatelessWidget {
                       );
 
                       onVisitaCreada(nuevaVisita);
-
-                      // Guardar la visita en Firestore
+                      
                       visitasCollection.add({
                         'nombre': nuevaVisita.nombre,
                         'apellido': nuevaVisita.apellido,
@@ -111,6 +111,7 @@ class AnunciarVisita extends StatelessWidget {
                         'motivo': nuevaVisita.motivo,
                         'fecha': nuevaVisita.fecha,
                         'hora': nuevaVisita.hora,
+                        'creado_por': FirebaseAuth.instance.currentUser!.uid,
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
