@@ -15,6 +15,8 @@ class PantallaTipoVisita extends StatefulWidget {
 class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   // Lista compartida de visitas agendadas
   List<Visita> visitasAgendadas = [];
+  bool _isButtonDisabled = false;
+
   void agregarVisita(Visita visita) {
     setState(() {
       visitasAgendadas.add(visita);
@@ -25,6 +27,7 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   void initState() {
     super.initState();
     _obtenerVisitasAgendadas();
+    _checkButtonStatus();
   }
 
   @override
@@ -35,7 +38,6 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   Future<void> _obtenerVisitasAgendadas() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      print('Usuario no autenticado');
       return;
     }
     try {
@@ -51,9 +53,38 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
         }).toList();
       });
     } catch (e) {
-      print('Error al obtener las visitas agendadas: $e');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Error al cargar las visitas agendadas'),
+      ));
+    }
+  }
+
+  Future<void> _checkButtonStatus() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
+
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final todayEnd = todayStart.add(const Duration(days: 1));
+
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('visitas')
+          .where('creado_por', isEqualTo: currentUser.uid)
+          .where('createdDate',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .where('createdDate', isLessThan: Timestamp.fromDate(todayEnd))
+          .get();
+
+      setState(() {
+        _isButtonDisabled = querySnapshot.docs.length > 2;
+      });
+    } catch (e) {
+      print('Error checking button status: $e');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al verificar el estado del botón'),
       ));
     }
   }
@@ -74,7 +105,9 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
         ),
         body: TabBarView(
           children: [
-            VisitasOnDemand(onAgregarVisita: agregarVisita),
+            VisitasOnDemand(
+                onAgregarVisita: agregarVisita,
+                isButtonDisabled: _isButtonDisabled),
             RefreshIndicator(
               onRefresh: _obtenerVisitasAgendadas,
               child: VisitasAgendadas(
@@ -95,23 +128,29 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
 
 class VisitasOnDemand extends StatelessWidget {
   final Function(Visita visita) onAgregarVisita;
+  final bool isButtonDisabled;
 
-  const VisitasOnDemand({super.key, required this.onAgregarVisita});
+  const VisitasOnDemand(
+      {super.key,
+      required this.onAgregarVisita,
+      required this.isButtonDisabled});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AnunciarVisita(
-                onVisitaCreada: onAgregarVisita,
-              ),
-            ),
-          );
-        },
+        onPressed: isButtonDisabled
+            ? null
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AnunciarVisita(
+                      onVisitaCreada: onAgregarVisita,
+                    ),
+                  ),
+                );
+              },
         child: const Text('Anunciar Visita'),
       ),
     );
@@ -170,16 +209,17 @@ class VisitasAgendadas extends StatelessWidget {
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.startToEnd) {
                 final now = DateTime.now();
-                final visitaDateTime = DateTime.parse('${visita.fecha} ${visita.hora}');
+                final visitaDateTime =
+                    DateTime.parse('${visita.fecha} ${visita.hora}');
                 if (visitaDateTime.isBefore(now)) {
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                      title: const Text('Visita Expirada'),
-                      content: const Text(
-                        'La visita ha excedido su fecha y hora programada. Por favor, vuelva a anunciarla.',
-                      ),
+                        title: const Text('Visita Expirada'),
+                        content: const Text(
+                          'La visita ha excedido su fecha y hora programada. Por favor, vuelva a anunciarla.',
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),

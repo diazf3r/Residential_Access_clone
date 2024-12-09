@@ -34,12 +34,12 @@ class _ProfilePageState extends State<ProfilePage> {
             userData = snapshot.docs.first.data();
           });
         } else {
-          // ill delete the print later
-          print('No se encontró el usuario en Firestore');
         }
       }
     } catch (e) {
-      print('Error al obtener datos del usuario: $e');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al cargar los datos del usuario'),
+      ));
     }
   }
 

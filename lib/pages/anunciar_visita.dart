@@ -28,6 +28,7 @@ class AnunciarVisita extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return Scaffold(
       backgroundColor: Colors.orange,
       body: Padding(
@@ -112,6 +113,7 @@ class AnunciarVisita extends StatelessWidget {
                         'fecha': nuevaVisita.fecha,
                         'hora': nuevaVisita.hora,
                         'creado_por': FirebaseAuth.instance.currentUser!.uid,
+                        'createdDate' : DateTime(now.year, now.month, now.day),
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
