@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/visita.dart';
 import 'package:myapp/widgets/inputs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AnunciarVisita extends StatelessWidget {
   final Function(Visita) onVisitaCreada;
@@ -15,7 +17,6 @@ class AnunciarVisita extends StatelessWidget {
   final TextEditingController horaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  // Focus nodes para rastrear cada campo
   final FocusNode nombreFocusNode = FocusNode();
   final FocusNode apellidoFocusNode = FocusNode();
   final FocusNode identidadFocusNode = FocusNode();
@@ -23,8 +24,11 @@ class AnunciarVisita extends StatelessWidget {
   final FocusNode fechaFocusNode = FocusNode();
   final FocusNode horaFocusNode = FocusNode();
 
+  final CollectionReference visitasCollection = FirebaseFirestore.instance.collection('visitas');
+
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return Scaffold(
       backgroundColor: Colors.orange,
       body: Padding(
@@ -100,6 +104,17 @@ class AnunciarVisita extends StatelessWidget {
                       );
 
                       onVisitaCreada(nuevaVisita);
+                      
+                      visitasCollection.add({
+                        'nombre': nuevaVisita.nombre,
+                        'apellido': nuevaVisita.apellido,
+                        'identidad': nuevaVisita.identidad,
+                        'motivo': nuevaVisita.motivo,
+                        'fecha': nuevaVisita.fecha,
+                        'hora': nuevaVisita.hora,
+                        'creado_por': FirebaseAuth.instance.currentUser!.uid,
+                        'createdDate' : DateTime(now.year, now.month, now.day),
+                      });
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -166,4 +181,15 @@ class Visita {
     required this.fecha,
     required this.hora,
   });
+
+    factory Visita.fromJson(Map<String, dynamic> json) {
+    return Visita(
+      nombre: json['nombre'],
+      apellido: json['apellido'],
+      identidad: json['identidad'],
+      motivo: json['motivo'],
+      fecha: json['fecha'],
+      hora: json['hora'],
+    );
+  }
 }

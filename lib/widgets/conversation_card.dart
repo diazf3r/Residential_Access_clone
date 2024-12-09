@@ -26,7 +26,7 @@ class ConversationCard extends StatelessWidget {
         color: backgroundColor,
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Padding(

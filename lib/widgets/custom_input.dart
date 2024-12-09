@@ -2,33 +2,64 @@
 
 import 'package:flutter/material.dart';
 
-class CustomInput extends StatelessWidget {
-  CustomInput(
-      {super.key,
-      required this.controlador,
-      required this.dialogo,
-      this.maxLength,
-      this.maxLines = 1});
+class CustomInput extends StatefulWidget {
+  CustomInput({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.validator,
+    this.obscureText = false,
+    this.icon = Icons.person,
+    this.maxLength,
+    this.maxlines = 1,
+    this.keyboardType = TextInputType.text,
+  });
 
-  final TextEditingController controlador;
-  final String dialogo;
-  int maxLines;
+  IconData icon;
+  var validator;
   int? maxLength;
+  var keyboardType;
+  var label;
+  var controller;
+  int? maxlines;
+  bool obscureText;
+
+  @override
+  State<CustomInput> createState() => _CustomInputState();
+}
+
+class _CustomInputState extends State<CustomInput> {
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controlador,
-      maxLines: maxLines,
-      maxLength: maxLength,
+    return TextFormField(
+      controller: widget.controller,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+      obscureText: widget.keyboardType == TextInputType.visiblePassword
+          ? _obscureText
+          : false,
+      maxLength: widget.maxLength,
+      maxLines: widget.maxlines,
       decoration: InputDecoration(
-        label: Text(
-          dialogo,
-          style: TextStyle(color: Colors.blueGrey[500]),
-        ),
+        label: Text(widget.label),
+        hintText: 'ingrese su ${widget.label}',
+        prefixIcon: Icon(widget.icon),
+        suffixIcon: widget.keyboardType == TextInputType.visiblePassword
+            ? IconButton(
+                icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility),
+                color: _obscureText ? Colors.grey : Colors.blue,
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+            : null,
         border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.elliptical(25, 25)),
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(16))),
       ),
     );
   }

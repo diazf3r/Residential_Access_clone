@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'anunciar_visita.dart';
-import 'visita.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PantallaTipoVisita extends StatefulWidget {
   const PantallaTipoVisita({super.key});
@@ -12,13 +14,79 @@ class PantallaTipoVisita extends StatefulWidget {
 
 class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   // Lista compartida de visitas agendadas
-  final List<Visita> visitasAgendadas = [];
+  List<Visita> visitasAgendadas = [];
+  bool _isButtonDisabled = false;
 
-  // Función para agregar una visita a la lista
   void agregarVisita(Visita visita) {
     setState(() {
       visitasAgendadas.add(visita);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _obtenerVisitasAgendadas();
+    _checkButtonStatus();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _obtenerVisitasAgendadas() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('visitas')
+          .where('creado_por', isEqualTo: currentUser.uid)
+          .get();
+      setState(() {
+        visitasAgendadas = snapshot.docs.map((item) {
+          final data = item.data();
+          data['id'] = item.id;
+          return Visita.fromJson(data);
+        }).toList();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al cargar las visitas agendadas'),
+      ));
+    }
+  }
+
+  Future<void> _checkButtonStatus() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
+
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final todayEnd = todayStart.add(const Duration(days: 1));
+
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('visitas')
+          .where('creado_por', isEqualTo: currentUser.uid)
+          .where('createdDate',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+          .where('createdDate', isLessThan: Timestamp.fromDate(todayEnd))
+          .get();
+
+      setState(() {
+        _isButtonDisabled = querySnapshot.docs.length > 2;
+      });
+    } catch (e) {
+      print('Error checking button status: $e');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al verificar el estado del botón'),
+      ));
+    }
   }
 
   @override
@@ -30,23 +98,26 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
           title: const Text('Gestión de Visitas'),
           bottom: const TabBar(
             tabs: [
-              Tab(text: 'On-Demand', icon: Icon(Icons.flash_on)),
-              Tab(text: 'Agendadas', icon: Icon(Icons.calendar_today)),
+              Tab(text: 'Anunciar', icon: Icon(Icons.flash_on)),
+              Tab(text: 'Lista de visitas', icon: Icon(Icons.calendar_today)),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            // Pasar la función para agregar visitas como parámetro
-            VisitasOnDemand(onAgregarVisita: agregarVisita),
-            // Mostrar las visitas agendadas
-            VisitasAgendadas(
-              visitas: visitasAgendadas,
-              onVisitaEliminada: (index) {
-                setState(() {
-                  visitasAgendadas.removeAt(index);
-                });
-              },
+            VisitasOnDemand(
+                onAgregarVisita: agregarVisita,
+                isButtonDisabled: _isButtonDisabled),
+            RefreshIndicator(
+              onRefresh: _obtenerVisitasAgendadas,
+              child: VisitasAgendadas(
+                visitas: visitasAgendadas,
+                onVisitaEliminada: (index) {
+                  setState(() {
+                    visitasAgendadas.removeAt(index);
+                  });
+                },
+              ),
             ),
           ],
         ),
@@ -57,30 +128,34 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
 
 class VisitasOnDemand extends StatelessWidget {
   final Function(Visita visita) onAgregarVisita;
+  final bool isButtonDisabled;
 
-  const VisitasOnDemand({super.key, required this.onAgregarVisita});
+  const VisitasOnDemand(
+      {super.key,
+      required this.onAgregarVisita,
+      required this.isButtonDisabled});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          // Navegar a AnunciarVisita con una función de callback
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AnunciarVisita(
-                onVisitaCreada: onAgregarVisita,
-              ),
-            ),
-          );
-        },
+        onPressed: isButtonDisabled
+            ? null
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AnunciarVisita(
+                      onVisitaCreada: onAgregarVisita,
+                    ),
+                  ),
+                );
+              },
         child: const Text('Anunciar Visita'),
       ),
     );
   }
 }
-
 
 class VisitasAgendadas extends StatelessWidget {
   final List<Visita> visitas;
@@ -94,7 +169,6 @@ class VisitasAgendadas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Verifica si la lista está vacía
     if (visitas.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -104,8 +178,6 @@ class VisitasAgendadas extends StatelessWidget {
           ),
         );
       });
-
-      // Retorna un mensaje informativo
       return const Center(
         child: Text(
           'No hay visitas agendadas.',
@@ -115,10 +187,6 @@ class VisitasAgendadas extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visitas Generadas'),
-        backgroundColor: Colors.orange,
-      ),
       body: ListView.builder(
         itemCount: visitas.length,
         itemBuilder: (context, index) {
@@ -140,28 +208,57 @@ class VisitasAgendadas extends StatelessWidget {
             ),
             confirmDismiss: (direction) async {
               if (direction == DismissDirection.startToEnd) {
-                // Generar el QR y mostrarlo en un diálogo
+                final now = DateTime.now();
+                final visitaDateTime =
+                    DateTime.parse('${visita.fecha} ${visita.hora}');
+                if (visitaDateTime.isBefore(now)) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Visita Expirada'),
+                        content: const Text(
+                          'La visita ha excedido su fecha y hora programada. Por favor, vuelva a anunciarla.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  return false;
+                }
+
                 showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
                       title: const Text('Código QR de la Visita'),
                       content: PrettyQrView.data(
-                        data: 'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
-                       errorCorrectLevel: QrErrorCorrectLevel.H,
-                      decoration: const PrettyQrDecoration(
-                      shape: PrettyQrSmoothSymbol(),
-                      image: PrettyQrDecorationImage(
-                      image: AssetImage('images/flutter.png'),
-                    position: PrettyQrDecorationImagePosition.embedded,
+                        data:
+                            'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
+                        errorCorrectLevel: QrErrorCorrectLevel.H,
+                        decoration: const PrettyQrDecoration(
+                          shape: PrettyQrSmoothSymbol(),
+                          image: PrettyQrDecorationImage(
+                            image: AssetImage('images/flutter.png'),
+                            position: PrettyQrDecorationImagePosition.embedded,
+                          ),
+                        ),
                       ),
-                      ),),
-                      );
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Cerrar'))
+                      ],
+                    );
                   },
                 );
-                return false; // No eliminar el ítem
+                return false;
               } else if (direction == DismissDirection.endToStart) {
-                // Confirmar eliminación
                 return await showDialog(
                   context: context,
                   builder: (context) {
@@ -176,8 +273,16 @@ class VisitasAgendadas extends StatelessWidget {
                           child: const Text('Cancelar'),
                         ),
                         TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                          onPressed: () => {
+                            Navigator.of(context).pop(true),
+                            onVisitaEliminada(index),
+                            FirebaseFirestore.instance
+                                .collection('visitas')
+                                .doc(visitas[index].identidad)
+                                .delete(),
+                          },
+                          child: const Text('Eliminar',
+                              style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     );

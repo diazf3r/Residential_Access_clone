@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/tipo_visita.dart';
 import 'anunciar_visita.dart';
-import 'visita.dart';
 
 class GestionarVisitas extends StatefulWidget {
   const GestionarVisitas({super.key});

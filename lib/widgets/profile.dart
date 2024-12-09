@@ -1,11 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/auth/login.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  Map<String, dynamic>? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('usuarios')
+            .where('email', isEqualTo: user.email)
+            .limit(1)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          setState(() {
+            userData = snapshot.docs.first.data();
+          });
+        } else {
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Error al cargar los datos del usuario'),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (userData == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil'),
+        title: const Text('Perfil'),
         centerTitle: true,
         backgroundColor: Colors.orange,
       ),
@@ -20,60 +66,57 @@ class ProfilePage extends StatelessWidget {
                 
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('assets/perfil.jpg'), // Imagen local
+                  backgroundImage: const AssetImage('assets/perfil.jpg'), // Imagen local
                   backgroundColor: Colors.orange.shade100,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Nombre del usuario
                 Text(
-                  'Juan Pérez',
-                  style: TextStyle(
+                  userData!['nombre'] ?? 'Nombre no disponible', 
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.orange, // Color del texto principal
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 8),
-                // Correo del usuario
+                const SizedBox(height: 8),
                 Text(
-                  'juan.perez@example.com',
+                  userData!['email'] ?? 'Correo no disponible',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[600],
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16),
-                // Información adicional
-                Divider(),
+                const SizedBox(height: 16),
+                const Divider(),
                 ListTile(
-                  leading: Icon(Icons.phone, color: Colors.orange),
-                  title: Text('Teléfono'),
-                  subtitle: Text('+504 8739 9832'),
+                  leading: const Icon(Icons.phone, color: Colors.orange),
+                  title: const Text('Teléfono'),
+                  subtitle: Text(userData!['telefono'] ?? 'Teléfono no disponible'),
                 ),
                 ListTile(
-                  leading: Icon(Icons.location_on, color: Colors.orange),
-                  title: Text('Ubicación'),
-                  subtitle: Text('San Pedro Sula, Honduras'),
+                  leading: const Icon(Icons.location_on, color: Colors.orange),
+                  title: const Text('Ubicación'),
+                  subtitle: Text(userData!['ubicacion'] ?? 'Ubicación no disponible'),
                 ),
-                ListTile(
-                  leading: Icon(Icons.cake, color: Colors.orange),
-                  title: Text('Fecha de nacimiento'),
-                  subtitle: Text('15 de marzo de 2002'),
-                ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Botón de cierre de sesión
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Aquí puedes implementar la funcionalidad de cierre de sesión
-                    print('Cerrar sesión');
+                    FirebaseAuth.instance.signOut().then((value) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      );
+                    });
                   },
-                  icon: Icon(Icons.logout),
-                  label: Text('Cerrar sesión'),
+                  icon: const Icon(Icons.logout),
+                  label: const Text('Cerrar sesión'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange, // Color del botón
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

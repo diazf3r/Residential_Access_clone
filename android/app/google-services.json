@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "43497146339",
+    "project_id": "accessclone-cd45d",
+    "storage_bucket": "accessclone-cd45d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43497146339:android:f0a94cf372f263652c82d6",
+        "android_client_info": {
+          "package_name": "com.access_clone.lenguajes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACsmj078p0V3XluaFz59L3n_msZcCna9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

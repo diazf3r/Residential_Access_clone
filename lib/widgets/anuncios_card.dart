@@ -22,6 +22,8 @@ class AnuncioCard extends StatelessWidget {
                   icon: const Icon(Icons.notification_important_sharp),
                   title: Text(
                     title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.amberAccent[400],
@@ -29,36 +31,38 @@ class AnuncioCard extends StatelessWidget {
                       fontSize: 23,
                     ),
                   ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image(
-                        image: NetworkImage(imagen),
-                        fit: BoxFit.cover,
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 180,
-                        child: SingleChildScrollView(
-                          child: Text(
-                            description,
-                            overflow: TextOverflow.fade,
-                            style: TextStyle(
-                                color: Colors.blueGrey[400],
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: NetworkImage(imagen),
+                          fit: BoxFit.cover,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 130,
+                          child: SingleChildScrollView(
+                            child: Text(
+                              description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.blueGrey[400],
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 16),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Image(
-                          height: 100,
-                          width: 100,
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/logo_sistemas.png'))
-                    ],
+                        const Image(
+                            height: 80,
+                            width: 100,
+                            fit: BoxFit.fitHeight,
+                            image:
+                                AssetImage('assets/images/logo_sistemas.png'))
+                      ],
+                    ),
                   ),
                 ));
       },
@@ -66,7 +70,7 @@ class AnuncioCard extends StatelessWidget {
         elevation: 2,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -98,7 +102,7 @@ class AnuncioCard extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 10,
+                    bottom: -8,
                     child: Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(

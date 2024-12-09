@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/widgets/custom_input.dart';
+import 'package:myapp/models/foro.dart';
+import 'package:myapp/widgets/custom_input2.dart';
 import 'package:myapp/widgets/list_consultas.dart';
 
 class ForoPage extends StatelessWidget {
@@ -7,6 +9,8 @@ class ForoPage extends StatelessWidget {
 
   final tema = TextEditingController();
   final consulta = TextEditingController();
+
+  final CollectionReference ref = FirebaseFirestore.instance.collection('foro');
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +37,57 @@ class ForoPage extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: ListView.separated(
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return ListConsultas(
-                    title: 'ESTO ES UN TITULO',
-                    description: 'ESTO ES UNA DESCRIPCION DE ALGO',
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  thickness: 1,
-                  indent: 15,
-                  endIndent: 15,
-                ),
-              ),
+              child: StreamBuilder(
+                  stream: ref.snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (snapshot.hasError) {
+                      return const AlertDialog(
+                        title: Text(
+                          'Error al obtener los datos',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w800),
+                        ),
+                      );
+                    }
+
+                    if (!snapshot.hasData) {
+                      return const AlertDialog(
+                        title: Text('No hay datos disponibles',
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w800)),
+                      );
+                    }
+
+                    final listaForo = snapshot.data!.docs.map((itemForo) {
+                      final temp = itemForo.data() as Map<String, dynamic>;
+                      temp['id'] = itemForo.id;
+                      return Foro.fromJson(temp);
+                    }).toList();
+
+                    return ListView.separated(
+                      itemCount: listaForo.length,
+                      itemBuilder: (context, index) {
+                        final foro = listaForo[index];
+                        return ListConsultas(
+                          title: foro.title,
+                          description: foro.description,
+                          titleRespuesta: foro.titleRespuesta,
+                          respuesta: foro.respuesta,
+                        );
+                      },
+                      separatorBuilder: (context, index) => const Divider(
+                        thickness: 1,
+                        indent: 15,
+                        endIndent: 15,
+                      ),
+                    );
+                  }),
             ),
           ),
         ],
@@ -56,45 +97,61 @@ class ForoPage extends StatelessWidget {
           showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  actionsPadding: const EdgeInsets.all(15),
-                  actions: [
-                    CustomInput(
-                      controlador: tema,
-                      maxLines: 2,
-                      dialogo: 'Ingrese su consulta',
-                    ),
-                    const SizedBox(height: 15),
-                    CustomInput(
-                      controlador: consulta,
-                      dialogo: 'Detalle su consulta',
-                      maxLines: 4,
-                      maxLength: 300,
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                              backgroundColor: Colors.red[800]),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            tema.text = '';
-                            consulta.text = '';
-                          },
-                          child: const Text('Cancelar'),
-                        ),
-                        const SizedBox(width: 5),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                              backgroundColor: Colors.amberAccent[700]),
-                          onPressed: () {},
-                          child: const Text('Crear Consulta'),
-                        ),
-                      ],
-                    ),
-                  ],
+                return SingleChildScrollView(
+                  child: AlertDialog(
+                    scrollable: true,
+                    actionsPadding: const EdgeInsets.all(15),
+                    actions: [
+                      CustomInput2(
+                        controlador: tema,
+                        maxLines: 2,
+                        dialogo: 'Ingrese su consulta',
+                      ),
+                      const SizedBox(height: 15),
+                      CustomInput2(
+                        controlador: consulta,
+                        dialogo: 'Detalle su consulta',
+                        maxLines: 4,
+                        maxLength: 300,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                                backgroundColor: Colors.red[800]),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              tema.text = '';
+                              consulta.text = '';
+                            },
+                            child: const Text('Cancelar'),
+                          ),
+                          const SizedBox(width: 5),
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                                backgroundColor: Colors.amberAccent[700]),
+                            onPressed: () {
+                              if (tema.text.isEmpty || consulta.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'No puede subir una consulta con algún campo vacio')));
+                              } else {
+                                final nuevaConsulta = Foro(
+                                    title: tema.text, description: consulta.text);
+                  
+                                ref.add(nuevaConsulta.toJson());
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text('Crear Consulta'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               });
         },

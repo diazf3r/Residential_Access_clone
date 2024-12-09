@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/anunciar_visita.dart';
 import 'package:myapp/pages/anuncios_page.dart';
 import 'package:myapp/pages/delivery.dart';
 import 'package:myapp/pages/encuestas.dart';
 import 'package:myapp/pages/foro_page.dart';
-import 'package:myapp/pages/gestionar_visitas.dart';
 import 'package:myapp/pages/tipo_visita.dart';
 import 'package:myapp/widgets/profile.dart';
-
-
-
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -75,8 +70,6 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              // Botón de menú y perfil
-             
               Positioned(
                 top: 40,
                 right: 20,
@@ -84,7 +77,7 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  ProfilePage()),
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   },
                   child: const Icon(Icons.person, color: Colors.white),
@@ -104,11 +97,15 @@ class HomePage extends StatelessWidget {
                 children: [
                   //_buildOption(context, Icons.home, 'VISITAS', AnunciarVisita(onVisitaCreada: (Visita ) {  },)),
                   //_buildOption(context, Icons.home, 'VISITAS', const GestionarVisitas()),
-                  _buildOption(context, Icons.calendar_month, 'GESTIÓN DE VISITAS', const PantallaTipoVisita() ),
-                  _buildOption(context, Icons.notifications, 'ANUNCIOS', const AnuncioPage() ),
-                  _buildOption(context, Icons.delivery_dining, 'DELIVERY', PantallaDelivery() ),
-                  _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage() ),
-                  _buildOption(context, Icons.bar_chart, 'ENCUESTAS', EncuestasPage() ),
+                  _buildOption(context, Icons.calendar_month,
+                      'GESTIÓN DE VISITAS', const PantallaTipoVisita()),
+                  _buildOption(
+                      context, Icons.notifications, 'ANUNCIOS', AnnouncePage()),
+                  _buildOption(context, Icons.delivery_dining, 'DELIVERY',
+                      PantallaDelivery()),
+                  _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage()),
+                  _buildOption(
+                      context, Icons.bar_chart, 'ENCUESTAS', EncuestasPage()),
                 ],
               ),
             ),
@@ -118,7 +115,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildOption(BuildContext context, IconData icon, String label, Widget page) {
+  Widget _buildOption(
+      BuildContext context, IconData icon, String label, Widget page) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -161,8 +159,10 @@ class CustomHeaderClipper extends CustomClipper<Path> {
     Path path = Path();
     path.lineTo(0, size.height - 60);
     path.quadraticBezierTo(
-      size.width / 2, size.height,
-      size.width, size.height - 60,
+      size.width / 2,
+      size.height,
+      size.width,
+      size.height - 60,
     );
     path.lineTo(size.width, 0);
     path.close();
@@ -172,4 +172,3 @@ class CustomHeaderClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
-

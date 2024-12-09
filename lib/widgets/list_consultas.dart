@@ -24,7 +24,8 @@ class ListConsultas extends StatelessWidget {
       ),
       subtitle: Text(
         description,
-        maxLines: 3,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       trailing: IconButton(
           onPressed: () {
@@ -33,6 +34,7 @@ class ListConsultas extends StatelessWidget {
                 builder: (context) {
                   return AlertDialog(
                     icon: const Icon(Icons.people_alt_rounded),
+                    actionsPadding: const EdgeInsets.all(8),
                     actions: [
                       ConversationCard(
                         title: title,
