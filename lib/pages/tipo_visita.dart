@@ -3,6 +3,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'anunciar_visita.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PantallaTipoVisita extends StatefulWidget {
   const PantallaTipoVisita({super.key});
@@ -32,12 +33,19 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   }
 
   Future<void> _obtenerVisitasAgendadas() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      print('Usuario no autenticado');
+      return;
+    }
     try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('visitas').get();
+      final snapshot = await FirebaseFirestore.instance
+          .collection('visitas')
+          .where('creado_por', isEqualTo: currentUser.uid)
+          .get();
       setState(() {
         visitasAgendadas = snapshot.docs.map((item) {
-          final data = item.data() as Map<String, dynamic>;
+          final data = item.data();
           data['id'] = item.id;
           return Visita.fromJson(data);
         }).toList();
@@ -68,8 +76,7 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
           children: [
             VisitasOnDemand(onAgregarVisita: agregarVisita),
             RefreshIndicator(
-              onRefresh:
-                  _obtenerVisitasAgendadas,
+              onRefresh: _obtenerVisitasAgendadas,
               child: VisitasAgendadas(
                 visitas: visitasAgendadas,
                 onVisitaEliminada: (index) {

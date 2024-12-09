@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EncuestasPage extends StatefulWidget {
+  const EncuestasPage({super.key});
+
   @override
   _EncuestasPageState createState() => _EncuestasPageState();
 }
@@ -33,7 +35,7 @@ class _EncuestasPageState extends State<EncuestasPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión de Encuestas'),
+        title: const Text('Gestión de Encuestas'),
         backgroundColor: Colors.orange,
       ),
       body: Padding(
@@ -48,7 +50,7 @@ class _EncuestasPageState extends State<EncuestasPage> {
                   Expanded(
                     child: TextFormField(
                       controller: _encuestaController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Nueva encuesta',
                         border: OutlineInputBorder(),
                       ),
@@ -60,16 +62,16 @@ class _EncuestasPageState extends State<EncuestasPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: _agregarEncuesta,
-                    child: Text('Agregar'),
+                    child: const Text('Agregar'),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Encuestas:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -83,10 +85,10 @@ class _EncuestasPageState extends State<EncuestasPage> {
                       setState(() {
                         // Solo permite dar like si no se ha dado dislike previamente
                         if (!_encuestas[index].hasDisliked) {
-                          _encuestas.forEach((e) {
+                          for (var e in _encuestas) {
                             e.hasLiked = false;
                             e.hasDisliked = false;
-                          });
+                          }
                           _encuestas[index].hasLiked = true;
                           _encuestas[index].likes++;
                         }
@@ -96,10 +98,10 @@ class _EncuestasPageState extends State<EncuestasPage> {
                       setState(() {
                         // Solo permite dar dislike si no se ha dado like previamente
                         if (!_encuestas[index].hasLiked) {
-                          _encuestas.forEach((e) {
+                          for (var e in _encuestas) {
                             e.hasLiked = false;
                             e.hasDisliked = false;
-                          });
+                          }
                           _encuestas[index].hasDisliked = true;
                           _encuestas[index].dislikes++;
                         }
@@ -135,7 +137,7 @@ class EncuestaTile extends StatelessWidget {
   final VoidCallback onDislike;
   final VoidCallback onDelete;
 
-  EncuestaTile({
+  const EncuestaTile({super.key, 
     required this.encuesta,
     required this.onLike,
     required this.onDislike,
@@ -160,7 +162,7 @@ class EncuestaTile extends StatelessWidget {
               onPressed: encuesta.hasDisliked ? null : onDislike,
             ),
             IconButton(
-              icon: Icon(Icons.delete, color: Colors.red),
+              icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,
             ),
           ],
