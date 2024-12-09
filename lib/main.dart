@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Access Clone',
       debugShowCheckedModeBanner: false,
-      // home: user != null ? const HomePage() : const LoginScreen(),
-      home: AnnouncePage(),
+      home: user != null ? const HomePage() : const LoginScreen(),
       onGenerateRoute: (settings) {
         return null;
       },
