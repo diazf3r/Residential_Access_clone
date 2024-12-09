@@ -34,6 +34,7 @@ class ListConsultas extends StatelessWidget {
                 builder: (context) {
                   return AlertDialog(
                     icon: const Icon(Icons.people_alt_rounded),
+                    actionsPadding: const EdgeInsets.all(8),
                     actions: [
                       ConversationCard(
                         title: title,

@@ -98,6 +98,7 @@ class ForoPage extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
+                  scrollable: true,
                   actionsPadding: const EdgeInsets.all(15),
                   actions: [
                     CustomInput2(

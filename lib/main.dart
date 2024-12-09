@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/auth/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:myapp/pages/anuncios_page.dart';
-import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/pages/principal.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';

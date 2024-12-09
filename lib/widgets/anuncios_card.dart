@@ -39,10 +39,9 @@ class AnuncioCard extends StatelessWidget {
                         image: NetworkImage(imagen),
                         fit: BoxFit.cover,
                       ),
-                      const SizedBox(height: 10),
                       Container(
                         alignment: Alignment.center,
-                        height: 180,
+                        height: 130,
                         child: SingleChildScrollView(
                           child: Text(
                             description,
@@ -55,11 +54,10 @@ class AnuncioCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
                       const Image(
-                          height: 100,
+                          height: 80,
                           width: 100,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitHeight,
                           image: AssetImage('assets/images/logo_sistemas.png'))
                     ],
                   ),
@@ -69,7 +67,7 @@ class AnuncioCard extends StatelessWidget {
         elevation: 2,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -101,7 +99,7 @@ class AnuncioCard extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 10,
+                    bottom: -8,
                     child: Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
