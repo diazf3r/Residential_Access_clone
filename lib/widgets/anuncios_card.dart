@@ -22,6 +22,8 @@ class AnuncioCard extends StatelessWidget {
                   icon: const Icon(Icons.notification_important_sharp),
                   title: Text(
                     title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.amberAccent[400],

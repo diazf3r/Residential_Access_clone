@@ -24,7 +24,8 @@ class ListConsultas extends StatelessWidget {
       ),
       subtitle: Text(
         description,
-        maxLines: 3,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       trailing: IconButton(
           onPressed: () {

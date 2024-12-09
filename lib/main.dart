@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/auth/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/pages/principal.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +18,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
- 
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Access Clone',
       debugShowCheckedModeBanner: false,
-      home: user != null ? const HomePage() : const LoginScreen(),
+      // home: user != null ? const HomePage() : const LoginScreen(),
+      home: ForoPage(),
       onGenerateRoute: (settings) {
         return null;
       },
