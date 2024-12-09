@@ -16,7 +16,6 @@ class AnunciarVisita extends StatelessWidget {
   final TextEditingController horaController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  // Focus nodes para rastrear cada campo
   final FocusNode nombreFocusNode = FocusNode();
   final FocusNode apellidoFocusNode = FocusNode();
   final FocusNode identidadFocusNode = FocusNode();
@@ -179,4 +178,15 @@ class Visita {
     required this.fecha,
     required this.hora,
   });
+
+    factory Visita.fromJson(Map<String, dynamic> json) {
+    return Visita(
+      nombre: json['nombre'],
+      apellido: json['apellido'],
+      identidad: json['identidad'],
+      motivo: json['motivo'],
+      fecha: json['fecha'],
+      hora: json['hora'],
+    );
+  }
 }
