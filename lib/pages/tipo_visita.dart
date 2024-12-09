@@ -24,36 +24,6 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _obtenerVisitasAgendadas();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<void> _obtenerVisitasAgendadas() async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('visitas').get();
-      setState(() {
-        visitasAgendadas = snapshot.docs.map((item) {
-          final data = item.data() as Map<String, dynamic>;
-          data['id'] = item.id;
-          return Visita.fromJson(data);
-        }).toList();
-      });
-    } catch (e) {
-      print('Error al obtener las visitas agendadas: $e');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Error al cargar las visitas agendadas'),
-      ));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -70,17 +40,13 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
         body: TabBarView(
           children: [
             VisitasOnDemand(onAgregarVisita: agregarVisita),
-            RefreshIndicator(
-              onRefresh:
-                  _obtenerVisitasAgendadas,
-              child: VisitasAgendadas(
-                visitas: visitasAgendadas,
-                onVisitaEliminada: (index) {
-                  setState(() {
-                    visitasAgendadas.removeAt(index);
-                  });
-                },
-              ),
+            VisitasAgendadas(
+              visitas: visitasAgendadas,
+              onVisitaEliminada: (index) {
+                setState(() {
+                  visitasAgendadas.removeAt(index);
+                });
+              },
             ),
           ],
         ),
