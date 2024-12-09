@@ -14,48 +14,13 @@ class PantallaTipoVisita extends StatefulWidget {
 
 class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
   // Lista compartida de visitas agendadas
-  List<Visita> visitasAgendadas = [];
+  final List<Visita> visitasAgendadas = [];
+
+  // Función para agregar una visita a la lista
   void agregarVisita(Visita visita) {
     setState(() {
       visitasAgendadas.add(visita);
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _obtenerVisitasAgendadas();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<void> _obtenerVisitasAgendadas() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      print('Usuario no autenticado');
-      return;
-    }
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('visitas')
-          .where('creado_por', isEqualTo: currentUser.uid)
-          .get();
-      setState(() {
-        visitasAgendadas = snapshot.docs.map((item) {
-          final data = item.data();
-          data['id'] = item.id;
-          return Visita.fromJson(data);
-        }).toList();
-      });
-    } catch (e) {
-      print('Error al obtener las visitas agendadas: $e');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Error al cargar las visitas agendadas'),
-      ));
-    }
   }
 
   @override
@@ -75,16 +40,13 @@ class _PantallaTipoVisitaState extends State<PantallaTipoVisita> {
         body: TabBarView(
           children: [
             VisitasOnDemand(onAgregarVisita: agregarVisita),
-            RefreshIndicator(
-              onRefresh: _obtenerVisitasAgendadas,
-              child: VisitasAgendadas(
-                visitas: visitasAgendadas,
-                onVisitaEliminada: (index) {
-                  setState(() {
-                    visitasAgendadas.removeAt(index);
-                  });
-                },
-              ),
+            VisitasAgendadas(
+              visitas: visitasAgendadas,
+              onVisitaEliminada: (index) {
+                setState(() {
+                  visitasAgendadas.removeAt(index);
+                });
+              },
             ),
           ],
         ),
@@ -139,6 +101,7 @@ class VisitasAgendadas extends StatelessWidget {
           ),
         );
       });
+
       return const Center(
         child: Text(
           'No hay visitas agendadas.',
@@ -147,104 +110,122 @@ class VisitasAgendadas extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: visitas.length,
-        itemBuilder: (context, index) {
-          final visita = visitas[index];
+    return ListView.builder(
+      itemCount: visitas.length,
+      itemBuilder: (context, index) {
+        final visita = visitas[index];
 
-          return Dismissible(
-            key: Key(visita.identidad),
-            background: Container(
-              color: Colors.green,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.qr_code, color: Colors.white),
-            ),
-            secondaryBackground: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            confirmDismiss: (direction) async {
-              if (direction == DismissDirection.startToEnd) {
+        return Dismissible(
+          key: Key(visita.identidad),
+          background: Container(
+            color: Colors.green,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.qr_code, color: Colors.white),
+          ),
+          secondaryBackground: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.startToEnd) {
+              final now = DateTime.now();
+              final visitaDateTime = DateTime.parse('${visita.fecha} ${visita.hora}');
+              
+              if (now.isAfter(visitaDateTime)) {
+                // Mostrar alerta si la fecha y hora han expirado
                 showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Código QR de la Visita'),
-                      content: PrettyQrView.data(
-                        data:
-                            'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
-                        errorCorrectLevel: QrErrorCorrectLevel.H,
-                        decoration: const PrettyQrDecoration(
-                          shape: PrettyQrSmoothSymbol(),
-                          image: PrettyQrDecorationImage(
-                            image: AssetImage('images/flutter.png'),
-                            position: PrettyQrDecorationImagePosition.embedded,
-                          ),
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('Cerrar'))
-                      ],
-                    );
-                  },
-                );
-                return false;
-              } else if (direction == DismissDirection.endToStart) {
-                return await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Eliminar Visita'),
+                      title: const Text('Visita Expirada'),
                       content: const Text(
-                        '¿Estás seguro de que deseas eliminar esta visita?',
+                        'La visita ha excedido su fecha y hora programada. Por favor, vuelva a anunciarla.',
                       ),
                       actions: [
                         TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: const Text('Cancelar'),
-                        ),
-                        TextButton(
-                          onPressed: () => {
-                            Navigator.of(context).pop(true),
-                            onVisitaEliminada(index),
-                            FirebaseFirestore.instance
-                                .collection('visitas')
-                                .doc(visitas[index].identidad)
-                                .delete(),
-                          },
-                          child: const Text('Eliminar',
-                              style: TextStyle(color: Colors.red)),
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Aceptar'),
                         ),
                       ],
                     );
                   },
                 );
+                return false; // No eliminar el ítem
+              } else {
+                // Mostrar el código QR
+                showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Código QR de la Visita'),
+                    content: PrettyQrView.data(
+                      data: 'Nombre: ${visita.nombre} ${visita.apellido}\nMotivo: ${visita.motivo}\nFecha: ${visita.fecha}\nHora: ${visita.hora}',
+                      errorCorrectLevel: QrErrorCorrectLevel.H,
+                      decoration: const PrettyQrDecoration(
+                        shape: PrettyQrSmoothSymbol(),
+                        image: PrettyQrDecorationImage(
+                          image: AssetImage('assets/images/logo_sistemas.png'),
+                          position: PrettyQrDecorationImagePosition.embedded,
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cerrar'),
+                      ),
+                    ],
+                  );
+                },
+              );
+
+                return false; // No eliminar el ítem
               }
-              return false;
-            },
-            onDismissed: (direction) {
-              if (direction == DismissDirection.endToStart) {
-                onVisitaEliminada(index);
-              }
-            },
-            child: Card(
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                title: Text('${visita.nombre} ${visita.apellido}'),
-                subtitle: Text(
-                  'Motivo: ${visita.motivo}\nFecha: ${visita.fecha} - Hora: ${visita.hora}',
-                ),
+            } else if (direction == DismissDirection.endToStart) {
+              // Confirmar eliminación
+              return await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Eliminar Visita'),
+                    content: const Text(
+                      '¿Estás seguro de que deseas eliminar esta visita?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+            return false;
+          },
+          onDismissed: (direction) {
+            if (direction == DismissDirection.endToStart) {
+              onVisitaEliminada(index);
+            }
+          },
+          child: Card(
+            margin: const EdgeInsets.all(10),
+            child: ListTile(
+              title: Text('${visita.nombre} ${visita.apellido}'),
+              subtitle: Text(
+                'Motivo: ${visita.motivo}\nFecha: ${visita.fecha} - Hora: ${visita.hora}',
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
