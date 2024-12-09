@@ -6,16 +6,17 @@ import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/pages/tipo_visita.dart';
 import 'package:myapp/widgets/profile.dart';
 
-// Modificación en HomePage
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+     
+
       body: Column(
         children: [
-          // Parte superior naranja personalizada
+         
           Stack(
             children: [
               ClipPath(
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
                 right: 0,
                 child: Column(
                   children: [
-                    // Círculo con el texto "Access"
+                    
                     Container(
                       height: 80,
                       width: 80,
