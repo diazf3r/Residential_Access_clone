@@ -22,7 +22,7 @@ class AnuncioCard extends StatelessWidget {
                   icon: const Icon(Icons.notification_important_sharp),
                   title: Text(
                     title,
-                    maxLines: 3,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -46,7 +46,8 @@ class AnuncioCard extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Text(
                             description,
-                            overflow: TextOverflow.fade,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: Colors.blueGrey[400],
                                 fontWeight: FontWeight.w300,

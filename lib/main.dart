@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/auth/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:myapp/pages/anuncios_page.dart';
 import 'package:myapp/pages/foro_page.dart';
 import 'package:myapp/pages/principal.dart';
 import 'firebase_options.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Access Clone',
       debugShowCheckedModeBanner: false,
       // home: user != null ? const HomePage() : const LoginScreen(),
-      home: ForoPage(),
+      home: AnnouncePage(),
       onGenerateRoute: (settings) {
         return null;
       },

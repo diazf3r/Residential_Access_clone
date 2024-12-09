@@ -104,8 +104,8 @@ class HomePage extends StatelessWidget {
                   //_buildOption(context, Icons.home, 'VISITAS', const GestionarVisitas()),
                   _buildOption(context, Icons.calendar_month,
                       'GESTIÓN DE VISITAS', const PantallaTipoVisita()),
-                  _buildOption(context, Icons.notifications, 'ANUNCIOS',
-                      const AnuncioPage()),
+                  _buildOption(
+                      context, Icons.notifications, 'ANUNCIOS', AnnouncePage()),
                   _buildOption(context, Icons.delivery_dining, 'DELIVERY',
                       PantallaDelivery()),
                   _buildOption(context, Icons.chat, 'SUGERENCIAS', ForoPage()),
